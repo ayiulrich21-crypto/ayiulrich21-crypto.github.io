@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ulrich - App Pi</title>
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+<style>
+body{font-family:Arial;text-align:center;padding:20px;background:#f5f0ff}
+.card{background:white;padding:20px;border-radius:15px;max-width:400px;margin:auto}
+button{background:#6a1b9a;color:white;border:none;padding:15px;border-radius:10px;font-size:16px;width:100%;margin-top:10px}
+button.pay{background:#ff8f00}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>💜 Ulrich</h1>
+<p>Bienvenue sur mon App Pi !</p>
+<p id="user">Non connecté</p>
+<button onclick="login()">Connecter avec Pi</button>
+<button class="pay" onclick="pay()">Payer 1 Pi - Test</button>
+<p id="status"></p>
+</div>
+<script>
+Pi.init({ version: "2.0", sandbox: true });
+async function login(){
+  try{
+    const auth = await Pi.authenticate(['username','payments'], onIncompletePaymentFound);
+    document.getElementById('user').innerText = "Bonjour @" + auth.user.username;
+    document.getElementById('status').innerText = "Connecté ✅";
+  }catch(e){ document.getElementById('status').innerText = "Erreur : " + e.message; }
+}
+function onIncompletePaymentFound(p){ console.log(p); }
+async function pay(){
+  try{
+    await Pi.createPayment({ amount: 1, memo: "Test paiement Ulrich", metadata: { test: "1" } }, {
+      onReadyForServerApproval: function(id){ document.getElementById('status').innerText = "En attente... " + id; },
+      onReadyForServerCompletion: function(id, txid){ document.getElementById('status').innerText = "Paiement réussi ✅ " + txid; },
+      onCancel: function(){ document.getElementById('status').innerText = "Paiement annulé"; },
+      onError: function(e){ document.getElementById('status').innerText = "Erreur paiement : " + e; }
+    });
+  }catch(e){ document.getElementById('status').innerText = "Erreur : " + e.message; }
+}
+</script>
+</body>
+</html>
