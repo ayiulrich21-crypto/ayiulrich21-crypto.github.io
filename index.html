@@ -3,81 +3,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yelognisse Sewedo - Boutique Pi</title>
-<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+<title>Yelognisse Sewedo</title>
 <style>
-body{font-family:Arial;margin:0;background:#fff5f8;text-align:center}
-header{background:#6a1b9a;color:white;padding:20px}
-.produit{background:white;margin:15px;padding:15px;border-radius:15px}
-button{background:#6a1b9a;color:white;border:none;padding:12px;border-radius:10px;width:100%;margin-top:8px;font-size:16px}
-button.pay{background:#ff8f00}
-#panier{background:white;margin:15px;padding:15px;border-radius:15px}
+body{background:#fff0f5;font-family:Arial;text-align:center;margin:0;padding:10px}
+h1{color:#8a008a}
+.produit{background:white;padding:15px;margin:10px;border-radius:15px;box-shadow:0 0 10px #ddd}
+button{background:#8a008a;color:white;border:none;padding:12px 20px;border-radius:10px;font-size:16px;margin-top:10px}
+.btn-wa{background:#25D366}
 </style>
 </head>
 <body>
-<header>
+
 <h1>👗 Yelognisse Sewedo</h1>
-<p>Couture • Pagne • Élégance • Bénin</p>
-<p id="user">Non connecté</p>
-<button onclick="login()" style="background:white;color:#6a1b9a">Connecter avec Pi</button>
-</header>
+<p>Couture • Miel • Farine • Crédit • Bénin 🇧🇯</p>
 
 <div class="produit">
-<h2>Robe en Pagne - Modèle 1</h2>
-<p>Superbe robe africaine, fait main</p>
-<p><b>Prix : 5 Pi</b></p>
-<button onclick="ajouter('Robe Pagne Modele 1', 5)">Ajouter au panier 🛒</button>
+<h2>🍯 Miel Pur</h2>
+<p>Prix : 3500 F</p>
+<button onclick="ajouter('Miel Pur - 3500F')">Ajouter au panier 🛒</button>
 </div>
 
 <div class="produit">
-<h2>Ensemble Pagne Homme</h2>
-<p>Ensemble élégant pour cérémonie</p>
-<p><b>Prix : 4 Pi</b></p>
-<button onclick="ajouter('Ensemble Homme', 4)">Ajouter au panier 🛒</button>
+<h2>🌾 Farine de Manioc - 1 Kilo</h2>
+<p>Prix : 500 F</p>
+<button onclick="ajouter('Farine 1kg - 500F')">Ajouter au panier 🛒</button>
 </div>
 
 <div class="produit">
-<h2>Jupe + Haut Pagne</h2>
-<p>Modèle tendance Yelognisse</p>
-<p><b>Prix : 3 Pi</b></p>
-<button onclick="ajouter('Jupe + Haut', 3)">Ajouter au panier 🛒</button>
+<h2>🌾 Farine de Manioc - 2 Kilos</h2>
+<p>Prix : 1000 F</p>
+<button onclick="ajouter('Farine 2kg - 1000F')">Ajouter au panier 🛒</button>
 </div>
 
-<div id="panier">
+<div class="produit">
+<h2>📱 Crédit / Dépôt - Moov</h2>
+<p>Moov, MTN, Celtiis</p>
+<button onclick="ajouter('Credit Moov')">Ajouter au panier 🛒</button>
+</div>
+
+<div class="produit">
+<h2>👗 Robe en Pagne</h2>
+<p>Prix : 5 Pi / ou sur commande</p>
+<button onclick="ajouter('Robe Pagne')">Ajouter au panier 🛒</button>
+</div>
+
+<div class="produit">
+<h2>👔 Ensemble Homme</h2>
+<p>Prix : 4 Pi / ou sur commande</p>
+<button onclick="ajouter('Ensemble Homme')">Ajouter au panier 🛒</button>
+</div>
+
+<div class="produit">
 <h2>🛒 Mon Panier</h2>
-<p id="liste">Panier vide</p>
-<p id="total"><b>Total : 0 Pi</b></p>
-<button class="pay" onclick="payer()">Payer avec Pi 💜</button>
-<p id="status"></p>
+<p id="panier">Panier vide</p>
+<button class="btn-wa" onclick="commander()">Commander sur WhatsApp 📱</button>
 </div>
-<p>📱 WhatsApp : Contacte Yelognisse Sewedo pour commande</p>
+
+<p>📱 WhatsApp : 01 97 05 18 73</p>
+<p>📍 Abomey-Calavi - Bénin</p>
+
 <script>
-Pi.init({ version: "2.0", sandbox: true });
-let panier = [];
-let total = 0;
-async function login(){
-  try{
-    const auth = await Pi.authenticate(['username','payments'], ()=>{});
-    document.getElementById('user').innerText = "Bonjour @" + auth.user.username + " ✅";
-  }catch(e){ document.getElementById('status').innerText = "Erreur : " + e.message; }
+let liste = [];
+function ajouter(p){
+  liste.push(p);
+  document.getElementById('panier').innerText = liste.join(' + ');
 }
-function ajouter(nom, prix){
-  panier.push(nom);
-  total += prix;
-  document.getElementById('liste').innerText = panier.join(" + ");
-  document.getElementById('total').innerHTML = "<b>Total : " + total + " Pi</b>";
-}
-async function payer(){
-  if(total===0){ document.getElementById('status').innerText = "Panier vide, choisis un modèle d'abord !"; return; }
-  try{
-    await Pi.createPayment({ amount: total, memo: "Commande Yelognisse Sewedo : " + panier.join(","), metadata: { boutique: "Yelognisse" } }, {
-      onReadyForServerApproval: (id)=>{ document.getElementById('status').innerText = "En attente... " + id; },
-      onReadyForServerCompletion: (id, txid)=>{ document.getElementById('status').innerText = "Merci ! Paiement réussi ✅ " + txid; panier=[]; total=0; },
-      onCancel: ()=>{ document.getElementById('status').innerText = "Paiement annulé"; },
-      onError: (e)=>{ document.getElementById('status').innerText = "Erreur : " + e; }
-    });
-  }catch(e){ document.getElementById('status').innerText = "Erreur : " + e.message; }
+function commander(){
+  if(liste.length==0){alert("Panier vide, choisis un produit d'abord");return;}
+  let msg = "Bonjour Yelognisse Sewedo, je veux commander : " + liste.join(', ');
+  window.open("https://wa.me/2290197051873?text=" + encodeURIComponent(msg));
 }
 </script>
+
 </body>
 </html>
