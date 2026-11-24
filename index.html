@@ -5,58 +5,60 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yelognisse Sewedo</title>
 <style>
-body{background:#fff0f5;font-family:Arial;text-align:center;margin:0;padding:10px}
-h1{color:#8a008a}
-.produit{background:white;padding:15px;margin:10px;border-radius:15px;box-shadow:0 0 10px #ddd}
-button{background:#8a008a;color:white;border:none;padding:12px 20px;border-radius:10px;font-size:16px;margin-top:10px}
+body{font-family:Arial;text-align:center;background:#fff8f0;padding:15px}
+h1{color:#b30000}
+.produit{background:white;border:1px solid #ddd;border-radius:12px;padding:15px;margin:12px 0}
+button{padding:10px 18px;border:none;border-radius:8px;background:#b30000;color:white;font-size:16px;margin:5px}
+.btn-pi{background:#6a1b9a}
 .btn-wa{background:#25D366}
 </style>
 </head>
 <body>
-
 <h1>👗 Yelognisse Sewedo</h1>
-<p>Couture • Miel • Farine • Crédit • Bénin 🇧🇯</p>
+<p>Couture • Miel • Farine • Crédit • Bénin</p>
 
 <div class="produit">
 <h2>🍯 Miel Pur</h2>
 <p>Prix : 3500 F</p>
-<button onclick="ajouter('Miel Pur - 3500F')">Ajouter au panier 🛒</button>
+<button onclick="ajouter('Miel Pur - 3500 F')">Ajouter</button>
 </div>
 
 <div class="produit">
 <h2>🌾 Farine de Manioc - 1 Kilo</h2>
 <p>Prix : 500 F</p>
-<button onclick="ajouter('Farine 1kg - 500F')">Ajouter au panier 🛒</button>
+<button onclick="ajouter('Farine 1kg - 500 F')">Ajouter</button>
 </div>
 
 <div class="produit">
 <h2>🌾 Farine de Manioc - 2 Kilos</h2>
 <p>Prix : 1000 F</p>
-<button onclick="ajouter('Farine 2kg - 1000F')">Ajouter au panier 🛒</button>
+<button onclick="ajouter('Farine 2kg - 1000 F')">Ajouter</button>
 </div>
 
 <div class="produit">
 <h2>📱 Crédit / Dépôt - Moov</h2>
 <p>Moov, MTN, Celtiis</p>
-<button onclick="ajouter('Credit Moov')">Ajouter au panier 🛒</button>
+<button onclick="ajouter('Credit Moov')">Ajouter</button>
 </div>
 
 <div class="produit">
 <h2>👗 Robe en Pagne</h2>
 <p>Prix : 5 Pi / ou sur commande</p>
-<button onclick="ajouter('Robe Pagne')">Ajouter au panier 🛒</button>
+<button onclick="ajouter('Robe Pagne - 5 Pi')">Ajouter</button>
 </div>
 
 <div class="produit">
 <h2>👔 Ensemble Homme</h2>
 <p>Prix : 4 Pi / ou sur commande</p>
-<button onclick="ajouter('Ensemble Homme')">Ajouter au panier 🛒</button>
+<button onclick="ajouter('Ensemble Homme - 4 Pi')">Ajouter</button>
 </div>
 
 <div class="produit">
 <h2>🛒 Mon Panier</h2>
 <p id="panier">Panier vide</p>
-<button class="btn-wa" onclick="commander()">Commander sur WhatsApp 📱</button>
+<button class="btn-wa" onclick="commander()">Commander sur WhatsApp</button><br>
+<button class="btn-pi" onclick="payerPi()">🟣 Payer avec Pi</button>
+<p id="msg-pi"></p>
 </div>
 
 <p>📱 WhatsApp : 01 97 05 18 73</p>
@@ -66,14 +68,18 @@ button{background:#8a008a;color:white;border:none;padding:12px 20px;border-radiu
 let liste = [];
 function ajouter(p){
   liste.push(p);
-  document.getElementById('panier').innerText = liste.join(' + ');
+  document.getElementById('panier').innerText = liste.join(' | ');
 }
 function commander(){
-  if(liste.length==0){alert("Panier vide, choisis un produit d'abord");return;}
+  if(liste.length==0){alert("Panier vide, choisis un produit");return;}
   let msg = "Bonjour Yelognisse Sewedo, je veux commander : " + liste.join(', ');
   window.open("https://wa.me/2290197051873?text=" + encodeURIComponent(msg));
 }
+function payerPi(){
+  if(liste.length==0){alert("Panier vide, choisis un produit");return;}
+  document.getElementById('msg-pi').innerText = "Tu as choisi : " + liste.join(', ') + ". Pour payer en Pi, envoie un message WhatsApp et on te donne l'adresse Pi.";
+  alert("Paiement Pi : Contacte Yelognisse sur WhatsApp pour valider ton paiement Pi.");
+}
 </script>
-
 </body>
 </html>
